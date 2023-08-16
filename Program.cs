@@ -1,10 +1,14 @@
+using MiniTodo.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<AppDbContext>();
+
 var app = builder.Build();
 
-app.MapGet("/", () => {
-    var todo = new Todo(Guid.NewGuid(), "Iniciar estudos .NET", false);
+app.MapGet("v1/todos", (AppDbContext context) => {
+    var todos = context.Todos.ToList();
 
-    return Results.Ok(todo);
+    return Results.Ok(todos);
     });
 
 app.Run();
